@@ -14,6 +14,7 @@ Rumtx = corrmtx(u,999,'autocorrelation');
 % Ruy(1) = | Ru(0), Ru(1) ... | |g(1)|
 % Ruy(2) = | Ru(1), Ru(2) ... | |g(2)|
 % ... .. ...
+% Honestly this didn't work, just use Rumtx as above instead...
 Ru = zeros(numel(Ru_vec),numel(Ru_vec));
 for i=1:numel(Ru_vec)
     for j=1:numel(Ru_vec)
@@ -25,10 +26,10 @@ end
 
 % Then Least squares for g?
 % This by Ru-1 * Ruy?
-g = Ru\Ruy;
-gpseudo = pinv(Ru) * Ruy;
-gmtx = Rumtx\Ruy;
-gpmtx = pinv(Rumtx)*Ruy;
+g = Ru\Ruy; % Didnt work
+gpseudo = pinv(Ru) * Ruy; % Didnt work
+gmtx = Rumtx\Ruy; % Did almost work, but no.
+gpmtx = pinv(Rumtx)*Ruy; % YES, SCORE!!!
 
 %Toeplitz ???
 
@@ -36,14 +37,14 @@ gpmtx = pinv(Rumtx)*Ruy;
 
 figure(1);
 hold on;
-%loglog(abs(fft(g)));
-%loglog(abs(fft(gpseudo)));
-%loglog(abs(fft(gmtx)));
-%loglog(abs(fft(gpmtx)));
+%loglog(abs(fft(g))); %No.
+%loglog(abs(fft(gpseudo))); %No.
+%loglog(abs(fft(gmtx))); %No.
+%loglog(abs(fft(gpmtx)));%Also no.
 subplot(2,1,1);
-semilogx(20*log10(abs(fft(gpmtx))));
+semilogx(20*log10(abs(fft(gpmtx)))); %YES
 subplot(2,1,2);
-semilogx(phase(fft(gpmtx)));
+semilogx(phase(fft(gpmtx))); % WOHO
 hold off;
 
 figure(2);
@@ -56,16 +57,16 @@ hold off;
 
 %% Prt 2
 
-Ghathat = fft(u).\fft(y);
+Ghathat = fft(u).\fft(y); % Straight forward.
 figure(3);
 hold on;
 subplot(2,1,1);
-semilogx(20*log10(abs(Ghathat)));
+semilogx(20*log10(abs(Ghathat))); %Custom bode plot
 subplot(2,1,2);
 semilogx(phase(Ghathat));
 hold off;
 %% Part 3
-bsize = 2^4;
+bsize = 2^4; % Assuming size of 2^n is the most efficient for underlying algorithms.
 %Gsmooth = conv(bartlett(bsize),Ghathat) / sum(bartlett(bsize)); % has bad
 %effects at endpoints of data due to zeros being averiaged together with
 %small amounts of data. Below solves that.
@@ -79,7 +80,7 @@ semilogx(phase(Gsmooth));
 hold off;
 
 
-%% What?
+%% What? Dont read this.
 y = normrnd(0,10,[1,1000])+5*sin(linspace(0,100,1000));
 figure(1);
 plot(y);
