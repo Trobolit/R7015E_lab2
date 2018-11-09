@@ -42,10 +42,12 @@ hold on;
 %loglog(abs(fft(gmtx))); %No.
 %loglog(abs(fft(gpmtx)));%Also no.
 subplot(2,1,1);
-semilogx(20*log10(abs(fft(gpmtx)))); %YES
+semilogx(20*log10(abs(fft(gpmtx))./(numel(u)))); %YES
 subplot(2,1,2);
 semilogx(phase(fft(gpmtx))); % WOHO
 hold off;
+
+matlab2tikz('lab2part1.tex');
 
 figure(2);
 hold on;
@@ -65,6 +67,10 @@ semilogx(20*log10(abs(Ghathat))); %Custom bode plot
 subplot(2,1,2);
 semilogx(phase(Ghathat));
 hold off;
+
+matlab2tikz('ETFE.tex');
+
+
 %% Part 3
 bsize = 2^4; % Assuming size of 2^n is the most efficient for underlying algorithms.
 %Gsmooth = conv(bartlett(bsize),Ghathat) / sum(bartlett(bsize)); % has bad
@@ -78,6 +84,8 @@ semilogx(20*log10(abs(Gsmooth)));
 subplot(2,1,2);
 semilogx(phase(Gsmooth));
 hold off;
+
+matlab2tikz('ETFEBV.tex');
 
 
 %% What? Dont read this.
